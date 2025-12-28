@@ -9,4 +9,6 @@ public interface movieRepository extends JpaRepository<Movies, String> {
     void deleteByMovieId(Integer movie_id);
     Optional<Movies> findByInteger(Integer movie_id);
 
+    void deleteByName(String movie_name);
+    Optional<Movies> findByName(String movie_name);
 }

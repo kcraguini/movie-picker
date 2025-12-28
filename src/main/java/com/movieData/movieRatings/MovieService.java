@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import jakarta.transaction.Transactional;
+
 @Component
 // What Component does is tell Springboot that this class should be managed by the Spring Container
 public class MovieService {
@@ -71,8 +73,22 @@ public class MovieService {
         if(existingMovies.isPresent()) {
             Movies movieToUpdate = existingMovies.get();
             movieToUpdate.setMovie_name(updateMovie.getMovie_name());
-        }
+            movieToUpdate.setMovie_year(updateMovie.getMovie_year());
+            movieToUpdate.setMovie_URI(updateMovie.getMovie_URI());
+            movieToUpdate.setMovie_rating(updateMovie.getMovie_rating());
 
-        
+            movieRepository.save(movieToUpdate);
+            
+            //see if the player was updated
+            return movieToUpdate;
+        }
+        return null;
+    }
+
+
+    @Transactional
+    //deletes a movie
+    public void deleteMovie(String movie_name) {
+        movieRepository.deleteByName(movie_name);
     }
 }

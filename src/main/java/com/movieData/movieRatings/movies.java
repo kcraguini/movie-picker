@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -12,7 +14,10 @@ import jakarta.persistence.Table;
 public class Movies 
 {
     @Id
-    @Column(movie_id = "movie_id", unique = true) // Might need to rework this later
+    //@Column(movie_id = "movie_id", unique = true) // Might need to rework this later
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
+    
     private Integer movie_id;
     private Date movie_date;
     private String movie_name;
