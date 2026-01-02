@@ -17,38 +17,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
+//Logger
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
+
 @RequestMapping(path = "api/v1/movies")
 public class MovieController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+
     private final MovieService movieService;
 
     @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
+        logger.info("MovieController intialized");
     }
 
+    /*
+    @Autowired
+    public HomeResource homeResource() {
+        return new HomeResource();
+    }
+
+     */
+    
     @GetMapping
     public List<Movies> getMovies(
-        @RequestParam(required = false) Integer movie_id, 
+        @RequestParam(required = false) Integer movie_id,
         @RequestParam(required = false) String movie_name,
         @RequestParam(required = false) Integer movie_year,
-        @RequestParam(required = false) Double rating) {
-            if(movie_id != null) {
-                return movieService.getMovieByYearandName(movie_id, movie_name);
-            }
-            else if(movie_name != null) {
-                return movieService.getMovieByName(movie_name);
-            }
-            else if(movie_year != null) {
-                return movieService.getMovieYear(movie_year);
-            }
-            else if(rating != null) {
-                return movieService.getRatingFromMovies(rating);
-            }
-            else { // Returns all movies when no parameters are given
-                return movieService.getMovies();
-            }
+        @RequestParam(required = false) Double rating
+    ) {
+
+                logger.info("Get requested recieved - movie_id: {}, movie_name: {}, movie_year: {}, rating: {}", movie_id, movie_name, movie_year, rating);
+        if (movie_id != null) {
+            return movieService.getMovieByYearandName(movie_id, movie_name);
+        } else if (movie_name != null) {
+            return movieService.getMovieByName(movie_name);
+        } else if (movie_year != null) {
+            return movieService.getMovieYear(movie_year);
+        } else if (rating != null) {
+            return movieService.getRatingFromMovies(rating);
+        } else { // Returns all movies when no parameters are given
+            return movieService.getMovies();
         }
+    }
 
     @PostMapping
     public ResponseEntity<Movies> addMovie(@RequestBody Movies movie) {
@@ -57,13 +74,12 @@ public class MovieController {
     }
 
     @PutMapping
-    //Handles put requesting
+    // Handles put requesting
     public ResponseEntity<Movies> updateMovie(@RequestBody Movies movies) {
         Movies resultMovie = movieService.updateMovie(movies);
-        if(resultMovie != null) {
+        if (resultMovie != null) {
             return new ResponseEntity<>(resultMovie, HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -73,5 +89,5 @@ public class MovieController {
         movieService.deleteMovie(movie_name);
         return new ResponseEntity<>("Player deleted successfully", HttpStatus.OK);
     }
-        
+
 }
