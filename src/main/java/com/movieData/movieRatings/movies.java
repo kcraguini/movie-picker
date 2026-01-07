@@ -15,7 +15,7 @@ public class Movies
 {
     @Id
     //@Column(movie_id = "movie_id", unique = true) // Might need to rework this later
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
     
     private Integer movie_id;
